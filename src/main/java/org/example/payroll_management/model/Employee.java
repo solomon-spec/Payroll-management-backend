@@ -38,4 +38,7 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AttendanceRecord> attendanceRecords;
+
+    @OneToMany(mappedBy = "leave", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    List<Leave> Leaves;
 }
