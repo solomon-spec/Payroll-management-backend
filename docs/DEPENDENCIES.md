@@ -6,7 +6,7 @@ This document provides a brief explanation of the dependencies used in the PAYRO
 
 [Hibernate ORM](https://hibernate.org/orm/documentation/6.5/) is a library providing Object/Relational Mapping (ORM) support to our application. It simplifies database access by converting Java objects into a format that can be easily stored and retrieved from the database.
 
-## MySQL Connector/J 8.4.0
+## MySQL Connector/J 8.0.26
 
 [MySQL Connector/J](https://dev.mysql.com/doc/connector-j/8.0/en/) is a JDBC Type 4 driver that provides database connectivity through the standard JDBC application program interfaces (APIs) available in the Java Platform, Enterprise Editions. It allows our application to interact with the MySQL database.
 
@@ -25,5 +25,3 @@ This document provides a brief explanation of the dependencies used in the PAYRO
 ## Spring Security Test
 
 [Spring Security Test](https://docs.spring.io/spring-security/site/docs/5.5.3/reference/html5/#test) is a library that provides support for testing Spring Security. It includes features like request post-processing for testing secured web requests and method-based security.
-
-Remember, each dependency in a project has a specific role. It's important to understand what each one does to ensure they're being used effectively.
