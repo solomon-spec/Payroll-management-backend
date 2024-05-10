@@ -27,10 +27,12 @@
             true
         </property>
         <property name="hbm2ddl.auto">
-            update
+            create
         </property>
         <mapping class="org.example.payroll_management.model.Employee"/>
         <mapping class="org.example.payroll_management.model.Leave"/>
         <mapping class="org.example.payroll_management.model.AttendanceRecord"/>
+        <mapping class="org.example.payroll_management.model.Salary"/>
+
     </session-factory>
 </hibernate-configuration>

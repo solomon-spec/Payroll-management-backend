@@ -26,8 +26,6 @@ public class Employee {
 
     private LocalDate dateOfJoining;
 
-    private Double salary;
-
     private String address;
 
     private String phoneNumber;
@@ -41,4 +39,8 @@ public class Employee {
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     List<Leave> Leaves;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "salary_id", referencedColumnName = "id")
+    private Salary salary;
 }
