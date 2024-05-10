@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "`Leave`")
 public class Leave {
 
     @Id
@@ -16,6 +17,7 @@ public class Leave {
     private Long id;
 
     @ManyToOne
+
     private Employee employee;
 
     private LocalDate startDate;
