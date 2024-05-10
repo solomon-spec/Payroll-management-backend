@@ -5,7 +5,6 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
 @Entity
 @Data
 @AllArgsConstructor
@@ -15,7 +14,6 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String firstName;
 
     private String middleName;
@@ -38,9 +36,12 @@ public class Employee {
     private List<AttendanceRecord> attendanceRecords;
 
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    List<Leave> Leaves;
+    List<Leave> leaves;
+
+    @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Salary> salaries;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "salary_id", referencedColumnName = "id")
-    private Salary salary;
+    @JoinColumn(name = "current_salary_id", referencedColumnName = "id")
+    private Salary currentSalary;
 }
