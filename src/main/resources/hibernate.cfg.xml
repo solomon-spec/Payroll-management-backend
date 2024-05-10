@@ -34,6 +34,7 @@
         <mapping class="org.example.payroll_management.model.AttendanceRecord"/>
         <mapping class="org.example.payroll_management.model.Salary"/>
         <mapping class="org.example.payroll_management.model.SalaryPaymentStatus"/>
+        <mapping class="org.example.payroll_management.model.AttendancePolicy"/>
 
     </session-factory>
 </hibernate-configuration>

@@ -44,4 +44,8 @@ public class Employee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "current_salary_id", referencedColumnName = "id")
     private Salary currentSalary;
+
+    @ManyToOne
+    @JoinColumn(name = "attendance_policy_id", referencedColumnName = "id")
+    private AttendancePolicy attendancePolicy;
 }
