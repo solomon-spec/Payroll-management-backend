@@ -32,6 +32,10 @@ public class Employee {
 
     private String bankAccount;
 
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
+    private Employee manager;
+
     @OneToMany(mappedBy = "employee", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<AttendanceRecord> attendanceRecords;
 
