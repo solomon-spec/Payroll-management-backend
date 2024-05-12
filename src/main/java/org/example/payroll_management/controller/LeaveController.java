@@ -22,7 +22,7 @@ public class LeaveController {
     // GET /api/leave
     // Get all leave records.
     // Response: JSON array containing all leave records.
-    @GetMapping("/")
+    @GetMapping("")
     public List<Leave> getAllLeaveRecords() {
         return leaveService.getAllLeaveRecords();
     }
@@ -30,7 +30,7 @@ public class LeaveController {
     // Create a new leave record for an employee.
     // Request Body: JSON object containing details such as `employeeId`, `startDate`, `endDate`, `type`.
     // Response: The created leave record with a generated `id`.
-    @PostMapping("/")
+    @PostMapping("")
     public Leave createLeaveRecord(Leave leave) {
         return leaveService.createLeaveRecord(leave);
     }
@@ -88,7 +88,7 @@ public class LeaveController {
 
     // PUT /api/leave/{id}/reject.
     // Reject a pending leave request.
-    // Request Body: Optional, depending on your system's logic (e.g., reason for rejection).
+    // Request Body: Optional, (e.g., reason for rejection).
     // Response: Updated leave record with status indicating rejection.
     @PutMapping("/{id}/reject")
     public Leave rejectLeaveRequest(@PathVariable Long id) {
@@ -112,22 +112,10 @@ public class LeaveController {
     // Response: JSON array containing matching leave records.
     @GetMapping("/search")
     public List<Leave> searchLeaves(@RequestParam(required = false) Long employeeId,
-                                    @RequestParam(required = false) String type,
                                     @RequestParam(required = false) LeaveStatus status,
                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
                                     @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return leaveService.searchLeave(employeeId,startDate, endDate, status);
     }
-
-
-    // TODO: Export Leave Records
-    // GET /api/leave/export
-    // Export leave records to a downloadable file (e.g., CSV, Excel).
-    // Request Parameters: Query parameters for export criteria.
-    // Response: Downloadable file containing leave records.
-    
-
-
-
 
 }

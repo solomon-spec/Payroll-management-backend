@@ -104,4 +104,7 @@ public class LeaveService {
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         });
     }
+
+    // export leave records
+
 }
