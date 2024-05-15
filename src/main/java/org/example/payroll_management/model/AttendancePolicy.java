@@ -3,6 +3,10 @@ package org.example.payroll_management.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -17,9 +21,13 @@ public class AttendancePolicy {
 
     private String description;
 
-    private Integer lateThreshold;
+    private LocalTime lateThreshold;
 
-    private Integer absenceThreshold;
+    private LocalTime absenceThreshold;
 
-    private Integer earlyLeaveThreshold;
+    private LocalTime earlyLeaveThreshold;
+
+    private LocalTime workStart;
+
+    private LocalTime workEnd;
 }
