@@ -3,7 +3,6 @@ package org.example.payroll_management.service;
 import org.example.payroll_management.model.AttendancePolicy;
 import org.example.payroll_management.model.AttendanceRecord;
 import org.example.payroll_management.model.Employee;
-import org.example.payroll_management.repository.AttendancePolicyRepository;
 import org.example.payroll_management.repository.AttendanceRecordRepository;
 import org.example.payroll_management.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
