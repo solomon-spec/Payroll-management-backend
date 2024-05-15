@@ -9,6 +9,7 @@ import org.example.payroll_management.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -82,17 +83,60 @@ public class AttendanceRecordService {
     }
 
     public List<AttendanceRecord> getLateCheckIns(Long employeeId) {
-        //TODO: Implement this method
-        return null;
+        AttendancePolicy attendancePolicy  = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new RuntimeException("Employee not found")).getAttendancePolicy();
+        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, null, null);
+
+        return attendanceRecords.stream().filter(attendanceRecord -> {
+            if (attendanceRecord.getCheckOut() == null) {
+                return true;
+            }
+            Duration lateThresholdDuration = Duration.ofHours(attendancePolicy.getLateThreshold().getHour())
+                    .plusMinutes(attendancePolicy.getLateThreshold().getMinute());
+
+            LocalTime thresholdTime = attendancePolicy.getWorkStart().plus(lateThresholdDuration);
+
+            return attendanceRecord.getCheckIn().isAfter(thresholdTime);
+
+        }).toList();
     }
 
     public List<AttendanceRecord> getAbsentDays(Long employeeId) {
-        //TODO: Implement this method
-        return null;
+
+        AttendancePolicy attendancePolicy  = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new RuntimeException("Employee not found")).getAttendancePolicy();
+        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, null, null);
+
+        return attendanceRecords.stream().filter(attendanceRecord -> {
+                        if (attendanceRecord.getCheckOut() == null) {
+                            return true;
+                        }
+                        Duration lateThresholdDuration = Duration.ofHours(attendancePolicy.getAbsenceThreshold().getHour())
+                                .plusMinutes(attendancePolicy.getAbsenceThreshold().getMinute());
+
+                        LocalTime thresholdTime = attendancePolicy.getWorkStart().plus(lateThresholdDuration);
+
+                        return attendanceRecord.getCheckIn().isAfter(thresholdTime);
+
+                    }).toList();
     }
 
     public List<AttendanceRecord> getEarlyLeaves(Long employeeId) {
-        //TODO: Implement this method
-        return null;
+        AttendancePolicy attendancePolicy  = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new RuntimeException("Employee not found")).getAttendancePolicy();
+        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, null, null);
+
+        return attendanceRecords.stream().filter(attendanceRecord -> {
+            if (attendanceRecord.getCheckOut() == null) {
+                return true;
+            }
+            Duration lateThresholdDuration = Duration.ofHours(attendancePolicy.getEarlyLeaveThreshold().getHour())
+                    .plusMinutes(attendancePolicy.getWorkStart().getMinute());
+
+            LocalTime thresholdTime = attendancePolicy.getWorkEnd().minus(lateThresholdDuration);
+
+            return attendanceRecord.getCheckIn().isBefore(thresholdTime);
+
+        }).toList();
     }
 }
