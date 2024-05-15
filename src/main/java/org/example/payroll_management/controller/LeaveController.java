@@ -22,7 +22,7 @@ public class LeaveController {
     // GET /api/leave
     // Get all leave records.
     // Response: JSON array containing all leave records.
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Leave> getAllLeaveRecords() {
         return leaveService.getAllLeaveRecords();
     }
