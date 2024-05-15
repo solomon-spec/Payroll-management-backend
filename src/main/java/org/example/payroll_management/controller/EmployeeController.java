@@ -55,7 +55,7 @@ public class EmployeeController {
     // GET /api/employees
     // Get a list of all employees.
     // Response: JSON array containing details of all employees.
-    @GetMapping("")
+    @GetMapping("/all")
     public List<Employee> getAllEmployee(){
         return employeeService.getAllEmployee();
     }
