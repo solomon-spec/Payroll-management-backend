@@ -31,7 +31,7 @@ public class LeaveController {
     // Request Body: JSON object containing details such as `employeeId`, `startDate`, `endDate`, `type`.
     // Response: The created leave record with a generated `id`.
     @PostMapping("")
-    public Leave createLeaveRecord(Leave leave) {
+    public Leave createLeaveRecord(@RequestBody Leave leave) {
         return leaveService.createLeaveRecord(leave);
     }
 
