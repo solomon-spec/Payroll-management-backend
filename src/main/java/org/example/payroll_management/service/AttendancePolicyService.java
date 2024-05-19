@@ -23,8 +23,7 @@ public class AttendancePolicyService {
         attendancePolicy.setId(id);
         return attendancePolicyRepository.save(attendancePolicy);
     }
-    public String deleteAttendancePolicy(Long id) {
+    public void deleteAttendancePolicy(Long id) {
         attendancePolicyRepository.deleteById(id);
-        return "Attendance policy deleted successfully";
     }
 }

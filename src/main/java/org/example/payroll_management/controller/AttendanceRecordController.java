@@ -24,7 +24,7 @@ public class AttendanceRecordController {
      * @param employeeId The unique identifier of the employee checking in
      * @return JSON object representing the newly created attendance record
      */
-    @PostMapping("/employees/{employeeId}/records")
+    @PostMapping("/employees/{employeeId}/check-in")
     public AttendanceRecord checkInEmployee(@PathVariable Long employeeId) {
         return attendanceRecordService.checkInEmployee(employeeId);
     }
@@ -35,7 +35,7 @@ public class AttendanceRecordController {
      * @param employeeId The unique identifier of the employee checking out
      * @return JSON object representing the updated attendance record
      */
-    @PatchMapping("/employees/{employeeId}/records/latest")
+    @PatchMapping("/employees/{employeeId}/check-out")
     public AttendanceRecord checkOutEmployee(@PathVariable Long employeeId) {
         return attendanceRecordService.checkOutEmployee(employeeId);
     }
@@ -48,7 +48,7 @@ public class AttendanceRecordController {
      * @param endDate The end date of the period
      * @return JSON object representing the attendance record of the employee between the specified dates
      */
-    @GetMapping("/employees/{employeeId}/records")
+    @GetMapping("/employees/{employeeId}")
     public List<AttendanceRecord> getAttendanceRecord(@PathVariable Long employeeId,
                                                       @RequestParam(required = false) LocalDate startDate,
                                                       @RequestParam(required = false) LocalDate endDate) {
@@ -62,7 +62,7 @@ public class AttendanceRecordController {
      * @param endDate   The end date of the date range
      * @return JSON array containing attendance records within the specified date range
      */
-    @GetMapping("/records")
+    @GetMapping("/all")
     public List<AttendanceRecord> getAttendanceRecord(@RequestParam(required = false) LocalDate startDate,
                                                       @RequestParam(required = false) LocalDate endDate) {
         return attendanceRecordService.getAttendanceRecordByTime(startDate, endDate);

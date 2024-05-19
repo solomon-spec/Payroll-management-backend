@@ -15,6 +15,7 @@ import java.util.List;
 
 @Service
 public class AttendanceRecordService {
+    //TODO: update the last 3 function to consider each other and the day that he hasn't checked in or out and the days that he was on leave
     private final AttendanceRecordRepository attendanceRecordRepository;
     private final EmployeeRepository employeeRepository;
 
