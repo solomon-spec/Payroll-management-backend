@@ -36,7 +36,7 @@ public class SalaryPaymentStatusRecord {
      * @param endDate   The end date of the date range
      * @return JSON array containing salary payment statuses within the specified date range
      */
-    @GetMapping("")
+    @GetMapping("/time")
     public List<SalaryPaymentStatus> getSalaryBetweenStartDateAndEndDate(@RequestParam LocalDate startDate, LocalDate endDate){
 
         return salaryPaymentStatusService.findByStartAndEndDate(startDate, endDate);
@@ -48,7 +48,7 @@ public class SalaryPaymentStatusRecord {
      * @param status The status of the salary payment (e.g., paid, pending)
      * @return JSON array containing salary payment statuses with the specified status
      */
-    @GetMapping("")
+    @GetMapping("/status")
      public List<SalaryPaymentStatus> getSalaryPaymentStatusByStatus(@RequestParam String status){
 
         return salaryPaymentStatusService.findByStatus(status);
