@@ -2,7 +2,6 @@ package org.example.payroll_management.controller;
 
 import org.example.payroll_management.model.SalaryPaymentStatus;
 import org.example.payroll_management.service.SalaryPaymentStatusService;
-import org.example.payroll_management.service.SalaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,6 +59,7 @@ public class SalaryPaymentStatusController{
      * @param salaryPaymentStatus The salary payment status object to be created
      * @return JSON object representing the newly created salary payment status record
      */
+    @PostMapping("/")
     public SalaryPaymentStatus createSalaryPaymentStatus(@RequestBody SalaryPaymentStatus salaryPaymentStatus){
         return salaryPaymentStatusService.save(salaryPaymentStatus);
     }
@@ -73,7 +73,7 @@ public class SalaryPaymentStatusController{
      * @param salaryPaymentStatus The salary payment status object with updated details
      * @return JSON object representing the updated salary payment status record
      */
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public SalaryPaymentStatus updateSalaryPaymentStatus(@PathVariable Long id, @RequestBody SalaryPaymentStatus salaryPaymentStatus){
         return salaryPaymentStatusService.update(id, salaryPaymentStatus);
     }
