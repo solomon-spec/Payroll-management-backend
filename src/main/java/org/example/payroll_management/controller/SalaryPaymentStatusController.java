@@ -11,11 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/salary-status")
-public class SalaryPaymentStatusRecord {
+public class SalaryPaymentStatusController{
     private final SalaryPaymentStatusService salaryPaymentStatusService;
 
     @Autowired
-    public SalaryPaymentStatusRecord(SalaryPaymentStatusService salaryPaymentStatusService){
+    public SalaryPaymentStatusController(SalaryPaymentStatusService salaryPaymentStatusService){
         this.salaryPaymentStatusService = salaryPaymentStatusService;
 
     }
@@ -60,9 +60,8 @@ public class SalaryPaymentStatusRecord {
      * @param salaryPaymentStatus The salary payment status object to be created
      * @return JSON object representing the newly created salary payment status record
      */
-    @PostMapping("/{id}")
-    public SalaryPaymentStatus updateSalaryPaymentStatus(@PathVariable Long id, @RequestBody SalaryPaymentStatus salaryPaymentStatus){
-        return salaryPaymentStatusService.update(id, salaryPaymentStatus);
+    public SalaryPaymentStatus createSalaryPaymentStatus(@RequestBody SalaryPaymentStatus salaryPaymentStatus){
+        return salaryPaymentStatusService.save(salaryPaymentStatus);
     }
 
 
@@ -74,9 +73,11 @@ public class SalaryPaymentStatusRecord {
      * @param salaryPaymentStatus The salary payment status object with updated details
      * @return JSON object representing the updated salary payment status record
      */
-    public SalaryPaymentStatus createSalaryPaymentStatus(@RequestBody SalaryPaymentStatus salaryPaymentStatus){
-        return salaryPaymentStatusService.save(salaryPaymentStatus);
+    @PostMapping("/{id}")
+    public SalaryPaymentStatus updateSalaryPaymentStatus(@PathVariable Long id, @RequestBody SalaryPaymentStatus salaryPaymentStatus){
+        return salaryPaymentStatusService.update(id, salaryPaymentStatus);
     }
+
 
 
 

@@ -21,9 +21,6 @@ public class SalaryPaymentStatusService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<SalaryPaymentStatus> findAllSalary(){
-        return salaryPaymentStatusRepository.findAll();
-    }
 
     public List<SalaryPaymentStatus> findByEmployeeId(Long employeeId){
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
