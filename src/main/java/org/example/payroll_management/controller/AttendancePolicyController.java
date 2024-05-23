@@ -1,8 +1,11 @@
 package org.example.payroll_management.controller;
 
+import org.example.payroll_management.dto.AttendancePolicyDTO;
 import org.example.payroll_management.model.AttendancePolicy;
 import org.example.payroll_management.service.AttendancePolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,8 +28,9 @@ public class AttendancePolicyController {
      * @return JSON object representing the newly created attendance policy
      */
     @PostMapping("")
-    public AttendancePolicy createAttendancePolicy(@RequestBody AttendancePolicy attendancePolicy) {
-        return attendancePolicyService.createAttendancePolicy(attendancePolicy);
+    public ResponseEntity<AttendancePolicyDTO> createAttendancePolicy(@RequestBody AttendancePolicyDTO attendancePolicy) {
+        AttendancePolicyDTO createdAttendancePolicy = attendancePolicyService.createAttendancePolicy(attendancePolicy);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdAttendancePolicy);
     }
 
     /**
@@ -36,21 +40,30 @@ public class AttendancePolicyController {
      * @return JSON object representing the attendance policy with the specified ID
      */
     @GetMapping("/{id}")
-    public AttendancePolicy getAttendancePolicyById(@PathVariable Long id) {
-        return attendancePolicyService.getAttendancePolicyById(id);
+    public ResponseEntity<AttendancePolicyDTO> getAttendancePolicyById(@PathVariable Long id) {
+        AttendancePolicyDTO attendancePolicy = attendancePolicyService.getAttendancePolicyById(id);
+        if (attendancePolicy == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(attendancePolicy);
     }
 
     /**
      * Updates an existing attendance policy with new data.
      *
-     * @param id The unique identifier of the attendance policy to be updated
+     * @param id  The unique identifier of the attendance policy to be updated
      * @param attendancePolicy JSON object containing updated name, description, lateThreshold, absenceThreshold, and earlyLeaveThreshold
      * @return JSON object representing the updated attendance policy
      */
     @PutMapping("/{id}")
-    public AttendancePolicy updateAttendancePolicy(@PathVariable Long id, @RequestBody AttendancePolicy attendancePolicy) {
-        return attendancePolicyService.updateAttendancePolicy(id, attendancePolicy);
+    public ResponseEntity<AttendancePolicyDTO> updateAttendancePolicy(@PathVariable Long id, @RequestBody AttendancePolicyDTO attendancePolicy) {
+        AttendancePolicyDTO updatedAttendancePolicy = attendancePolicyService.updateAttendancePolicy(id, attendancePolicy);
+        if (updatedAttendancePolicy == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.ok(updatedAttendancePolicy);
     }
+
     /**
      * Deletes an attendance policy from the system.
      *
@@ -58,9 +71,11 @@ public class AttendancePolicyController {
      * @return No content (204) if successful
      */
     @DeleteMapping("/{id}")
-    public void deleteAttendancePolicy(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteAttendancePolicy(@PathVariable Long id) {
         attendancePolicyService.deleteAttendancePolicy(id);
-    }
+        return ResponseEntity.noContent().build();
 
+
+    }
 }
 

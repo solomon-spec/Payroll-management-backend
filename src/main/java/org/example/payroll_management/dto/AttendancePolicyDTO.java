@@ -4,15 +4,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendancePolicyDTO {
 
     private Long id;
-    private String workStart;
-    private String workEnd;
-    private String lateThreshold;
-    private String earlyLeaveThreshold;
-    private String absenceThreshold;
+    private String name;
+    private String description;
+    private LocalTime workStart;
+    private LocalTime workEnd;
+    private LocalTime lateThreshold;
+    private LocalTime earlyLeaveThreshold;
+    private LocalTime absenceThreshold;
 }
