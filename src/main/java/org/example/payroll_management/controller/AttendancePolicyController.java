@@ -1,7 +1,6 @@
 package org.example.payroll_management.controller;
 
 import org.example.payroll_management.dto.AttendancePolicyDTO;
-import org.example.payroll_management.model.AttendancePolicy;
 import org.example.payroll_management.service.AttendancePolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

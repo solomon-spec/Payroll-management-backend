@@ -1,8 +1,10 @@
 package org.example.payroll_management.controller;
 
-import org.example.payroll_management.model.SalaryPaymentStatus;
+import org.example.payroll_management.dto.SalaryPaymentStatusDTO;
 import org.example.payroll_management.service.SalaryPaymentStatusService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,8 +27,9 @@ public class SalaryPaymentStatusController{
      * @return JSON array containing salary payment statuses for the specified employee
      */
     @GetMapping("/employee/{employeeId}")
-    public List<SalaryPaymentStatus> getEmployeeSalaryStatus(@PathVariable Long employeeId){
-        return salaryPaymentStatusService.findByEmployeeId(employeeId);
+    public ResponseEntity<List<SalaryPaymentStatusDTO>> getEmployeeSalaryStatus(@PathVariable Long employeeId){
+        List<SalaryPaymentStatusDTO> records = salaryPaymentStatusService.findByEmployeeId(employeeId);
+        return ResponseEntity.ok(records);
     }
     /**
      * Retrieves all salary payment statuses within a specified date range.
@@ -36,9 +39,9 @@ public class SalaryPaymentStatusController{
      * @return JSON array containing salary payment statuses within the specified date range
      */
     @GetMapping("/time")
-    public List<SalaryPaymentStatus> getSalaryBetweenStartDateAndEndDate(@RequestParam LocalDate startDate, LocalDate endDate){
-
-        return salaryPaymentStatusService.findByStartAndEndDate(startDate, endDate);
+    public ResponseEntity<List<SalaryPaymentStatusDTO>> getSalaryBetweenStartDateAndEndDate(@RequestParam LocalDate startDate, @RequestParam LocalDate endDate){
+        List<SalaryPaymentStatusDTO> records = salaryPaymentStatusService.findByStartAndEndDate(startDate, endDate);
+        return ResponseEntity.ok(records);
     }
 
     /**
@@ -48,20 +51,21 @@ public class SalaryPaymentStatusController{
      * @return JSON array containing salary payment statuses with the specified status
      */
     @GetMapping("/status")
-     public List<SalaryPaymentStatus> getSalaryPaymentStatusByStatus(@RequestParam String status){
-
-        return salaryPaymentStatusService.findByStatus(status);
+    public ResponseEntity<List<SalaryPaymentStatusDTO>> getSalaryPaymentStatusByStatus(@RequestParam String status){
+        List<SalaryPaymentStatusDTO> records = salaryPaymentStatusService.findByStatus(status);
+        return ResponseEntity.ok(records);
     }
 
     /**
      * Creates a new salary payment status record.
      *
-     * @param salaryPaymentStatus The salary payment status object to be created
+     * @param salaryPaymentStatusDTO The salary payment status object to be created
      * @return JSON object representing the newly created salary payment status record
      */
     @PostMapping("/")
-    public SalaryPaymentStatus createSalaryPaymentStatus(@RequestBody SalaryPaymentStatus salaryPaymentStatus){
-        return salaryPaymentStatusService.save(salaryPaymentStatus);
+    public ResponseEntity<SalaryPaymentStatusDTO> createSalaryPaymentStatus(@RequestBody SalaryPaymentStatusDTO salaryPaymentStatusDTO){
+        SalaryPaymentStatusDTO createdRecord = salaryPaymentStatusService.save(salaryPaymentStatusDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRecord);
     }
 
 
@@ -70,12 +74,14 @@ public class SalaryPaymentStatusController{
      * Updates an existing salary payment status record.
      *
      * @param id   The unique identifier of the salary payment status record to be updated
-     * @param salaryPaymentStatus The salary payment status object with updated details
+     * @param salaryPaymentStatusDTO The salary payment status object with updated details
      * @return JSON object representing the updated salary payment status record
      */
+
     @PutMapping("/{id}")
-    public SalaryPaymentStatus updateSalaryPaymentStatus(@PathVariable Long id, @RequestBody SalaryPaymentStatus salaryPaymentStatus){
-        return salaryPaymentStatusService.update(id, salaryPaymentStatus);
+    public ResponseEntity<SalaryPaymentStatusDTO> updateSalaryPaymentStatus(@PathVariable Long id, @RequestBody SalaryPaymentStatusDTO salaryPaymentStatusDTO){
+        SalaryPaymentStatusDTO updatedRecord = salaryPaymentStatusService.update(id, salaryPaymentStatusDTO);
+        return ResponseEntity.ok(updatedRecord);
     }
 
 
