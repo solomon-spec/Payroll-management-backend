@@ -1,13 +1,15 @@
 package org.example.payroll_management.controller;
 
-import org.example.payroll_management.model.Salary;
+import org.example.payroll_management.dto.SalaryDTO;
 import org.example.payroll_management.service.SalaryService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/salary")
+@RequestMapping("/api/salaries")
 public class SalaryController {
     public final SalaryService salaryService;
 
@@ -20,9 +22,10 @@ public class SalaryController {
      *
      * @return JSON array containing all salary records
      */
-    @GetMapping("/all")
-    public List<Salary> getAllSalaries() {
-        return salaryService.getAllSalaries();
+    @GetMapping("")
+    public ResponseEntity<List<SalaryDTO>> getAllSalaries() {
+        List<SalaryDTO> salaries = salaryService.getAllSalaries();
+        return new ResponseEntity<>(salaries, HttpStatus.OK);
     }
 
     /**
@@ -32,8 +35,9 @@ public class SalaryController {
      * @return JSON object representing the newly created salary record
      */
     @PostMapping("")
-    public Salary createSalary(@RequestBody Salary salary) {
-        return salaryService.createSalary(salary);
+    public ResponseEntity<SalaryDTO> createSalary(@RequestBody SalaryDTO salary) {
+        SalaryDTO createdSalary = salaryService.createSalary(salary);
+        return new ResponseEntity<>(createdSalary, HttpStatus.CREATED);
     }
 
     /**
@@ -43,8 +47,9 @@ public class SalaryController {
      * @return JSON object representing the salary record with the specified ID
      */
     @GetMapping("/{id}")
-    public Salary getSalaryById(@PathVariable Long id) {
-        return salaryService.getSalaryById(id);
+    public ResponseEntity<SalaryDTO> getSalaryById(@PathVariable Long id) {
+        SalaryDTO salary = salaryService.getSalaryById(id);
+        return new ResponseEntity<>(salary, HttpStatus.OK);
     }
 
     /**
@@ -55,8 +60,9 @@ public class SalaryController {
      * @return JSON object representing the updated salary record
      */
     @PutMapping("/{id}")
-    public Salary updateSalary(@PathVariable Long id, @RequestBody Salary salary) {
-        return salaryService.updateSalary(id, salary);
+    public ResponseEntity<SalaryDTO> updateSalary(@PathVariable Long id, @RequestBody SalaryDTO salary) {
+        SalaryDTO updatedSalary = salaryService.updateSalary(id, salary);
+        return new ResponseEntity<>(updatedSalary, HttpStatus.OK);
     }
     /**
      * Deletes a salary record from the system.
@@ -65,8 +71,9 @@ public class SalaryController {
      * @return No content (204) if successful
      */
     @DeleteMapping("/{id}")
-    public String deleteSalary(@PathVariable Long id) {
-        return salaryService.deleteSalary(id);
+    public ResponseEntity<Void> deleteSalary(@PathVariable Long id) {
+        salaryService.deleteSalary(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     /**
@@ -76,8 +83,9 @@ public class SalaryController {
      * @return JSON array containing salary records of the employee
      */
     @GetMapping("/employee/{employeeId}")
-    public List<Salary> getSalariesByEmployeeId(@PathVariable Long employeeId) {
-        return salaryService.getSalariesByEmployeeId(employeeId);
+    public ResponseEntity<List<SalaryDTO>> getSalariesByEmployeeId(@PathVariable Long employeeId) {
+        List<SalaryDTO> salaries = salaryService.getSalariesByEmployeeId(employeeId);
+        return new ResponseEntity<>(salaries, HttpStatus.OK);
     }
 
 }
