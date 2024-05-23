@@ -1,5 +1,6 @@
 package org.example.payroll_management.service;
 
+import org.example.payroll_management.dto.AttendanceRecordDTO;
 import org.example.payroll_management.model.AttendancePolicy;
 import org.example.payroll_management.model.AttendanceRecord;
 import org.example.payroll_management.model.Employee;
@@ -12,6 +13,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AttendanceRecordService {
@@ -25,17 +27,41 @@ public class AttendanceRecordService {
         this.employeeRepository = employeeRepository;
     }
 
-    public AttendanceRecord checkInEmployee(Long employeeId) {
+    public AttendanceRecordDTO convertToDTO(AttendanceRecord attendanceRecord) {
+        return new AttendanceRecordDTO(
+                attendanceRecord.getId(),
+                attendanceRecord.getEmployee().getId(),
+                attendanceRecord.getDate(),
+                attendanceRecord.getCheckIn(),
+                attendanceRecord.getCheckOut()
+        );
+    }
+
+    public AttendanceRecord convertToEntity(AttendanceRecordDTO attendanceRecordDTO) {
+        AttendanceRecord attendanceRecord = new AttendanceRecord();
+        Employee employee = employeeRepository.findById(attendanceRecordDTO.getEmployeeId())
+                .orElseThrow(() -> new RuntimeException("Employee not found"));
+
+        attendanceRecord.setId(attendanceRecordDTO.getId());
+        attendanceRecord.setEmployee(employee);
+        attendanceRecord.setDate(attendanceRecordDTO.getDate());
+        attendanceRecord.setCheckIn(attendanceRecordDTO.getCheckInTime());
+        attendanceRecord.setCheckOut(attendanceRecordDTO.getCheckOutTime());
+
+        return attendanceRecord;
+    }
+
+    public AttendanceRecordDTO checkInEmployee(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Employee not found"));
         AttendanceRecord attendanceRecord = new AttendanceRecord();
         attendanceRecord.setEmployee(employee);
         attendanceRecord.setCheckIn(LocalTime.now());
         attendanceRecordRepository.save(attendanceRecord);
-        return attendanceRecord;
+        return convertToDTO(attendanceRecord);
 
     }
 
-    public AttendanceRecord checkOutEmployee(Long employeeId) {
+    public AttendanceRecordDTO checkOutEmployee(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Employee not found"));
         AttendanceRecord attendanceRecord = attendanceRecordRepository.findFirstByEmployeeOrderByCheckInDesc(employee).orElseThrow(() -> new RuntimeException("Employee has not checked in"));
         if (attendanceRecord.getCheckOut() != null) {
@@ -43,10 +69,10 @@ public class AttendanceRecordService {
         }
         attendanceRecord.setCheckOut(LocalTime.now());
         attendanceRecordRepository.save(attendanceRecord);
-        return attendanceRecord;
+        return convertToDTO(attendanceRecord);
     }
 
-    public List<AttendanceRecord> getAttendanceRecord(Long employeeId, LocalDate startDate, LocalDate endDate) {
+    public List<AttendanceRecordDTO> getAttendanceRecord(Long employeeId, LocalDate startDate, LocalDate endDate) {
          employeeRepository.findById(employeeId).orElseThrow(() -> new RuntimeException("Employee not found"));
 
         if (startDate == null) {
@@ -55,25 +81,25 @@ public class AttendanceRecordService {
         if (endDate == null) {
             endDate = LocalDate.now();
         }
-        return attendanceRecordRepository.findByEmployeeIdAndDateBetween(employeeId, startDate, endDate);
+        return attendanceRecordRepository.findByEmployeeIdAndDateBetween(employeeId, startDate, endDate).stream().map(this::convertToDTO).toList();
     }
 
-    public List<AttendanceRecord> getAttendanceRecordByTime(LocalDate startDate, LocalDate endDate) {
+    public List<AttendanceRecordDTO> getAttendanceRecordByTime(LocalDate startDate, LocalDate endDate) {
         if (startDate == null) {
             startDate = LocalDate.MIN;
         }
         if (endDate == null) {
             endDate = LocalDate.now();
         }
-        return attendanceRecordRepository.findByDateBetween(startDate, endDate);
+        return attendanceRecordRepository.findByDateBetween(startDate, endDate).stream().map(this::convertToDTO).toList();
     }
 
     public String getWorkTime(Long employeeId, LocalDate startDate, LocalDate endDate) {
-        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, startDate, endDate);
+        List<AttendanceRecordDTO> attendanceRecords = getAttendanceRecord(employeeId, startDate, endDate);
         long totalWorkTime = 0;
-        for (AttendanceRecord attendanceRecord : attendanceRecords) {
-            if (attendanceRecord.getCheckOut() != null) {
-                totalWorkTime += attendanceRecord.getCheckOut().toSecondOfDay() - attendanceRecord.getCheckIn().toSecondOfDay();
+        for (AttendanceRecordDTO attendanceRecord : attendanceRecords) {
+            if (attendanceRecord.getCheckOutTime() != null) {
+                totalWorkTime += attendanceRecord.getCheckOutTime().toSecondOfDay() - attendanceRecord.getCheckInTime().toSecondOfDay();
             }
         }
         long hours = totalWorkTime / 3600;
@@ -82,13 +108,13 @@ public class AttendanceRecordService {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds);
     }
 
-    public List<AttendanceRecord> getLateCheckIns(Long employeeId) {
+    public List<AttendanceRecordDTO> getLateCheckIns(Long employeeId) {
         AttendancePolicy attendancePolicy  = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new RuntimeException("Employee not found")).getAttendancePolicy();
-        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, null, null);
+        List<AttendanceRecordDTO> attendanceRecords = getAttendanceRecord(employeeId, null, null);
 
         return attendanceRecords.stream().filter(attendanceRecord -> {
-            if (attendanceRecord.getCheckOut() == null) {
+            if (attendanceRecord.getCheckOutTime() == null) {
                 return true;
             }
             Duration lateThresholdDuration = Duration.ofHours(attendancePolicy.getLateThreshold().getHour())
@@ -96,19 +122,19 @@ public class AttendanceRecordService {
 
             LocalTime thresholdTime = attendancePolicy.getWorkStart().plus(lateThresholdDuration);
 
-            return attendanceRecord.getCheckIn().isAfter(thresholdTime);
+            return attendanceRecord.getCheckInTime().isAfter(thresholdTime);
 
-        }).toList();
+        }).collect(Collectors.toList());
     }
 
-    public List<AttendanceRecord> getAbsentDays(Long employeeId) {
+    public List<AttendanceRecordDTO> getAbsentDays(Long employeeId) {
 
         AttendancePolicy attendancePolicy  = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new RuntimeException("Employee not found")).getAttendancePolicy();
-        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, null, null);
+        List<AttendanceRecordDTO> attendanceRecords = getAttendanceRecord(employeeId, null, null);
 
         return attendanceRecords.stream().filter(attendanceRecord -> {
-                        if (attendanceRecord.getCheckOut() == null) {
+                        if (attendanceRecord.getCheckOutTime() == null) {
                             return true;
                         }
                         Duration lateThresholdDuration = Duration.ofHours(attendancePolicy.getAbsenceThreshold().getHour())
@@ -116,18 +142,18 @@ public class AttendanceRecordService {
 
                         LocalTime thresholdTime = attendancePolicy.getWorkStart().plus(lateThresholdDuration);
 
-                        return attendanceRecord.getCheckIn().isAfter(thresholdTime);
+                        return attendanceRecord.getCheckInTime().isAfter(thresholdTime);
 
                     }).toList();
     }
 
-    public List<AttendanceRecord> getEarlyLeaves(Long employeeId) {
+    public List<AttendanceRecordDTO> getEarlyLeaves(Long employeeId) {
         AttendancePolicy attendancePolicy  = employeeRepository.findById(employeeId).orElseThrow(
                 () -> new RuntimeException("Employee not found")).getAttendancePolicy();
-        List<AttendanceRecord> attendanceRecords = getAttendanceRecord(employeeId, null, null);
+        List<AttendanceRecordDTO> attendanceRecords = getAttendanceRecord(employeeId, null, null);
 
         return attendanceRecords.stream().filter(attendanceRecord -> {
-            if (attendanceRecord.getCheckOut() == null) {
+            if (attendanceRecord.getCheckOutTime() == null) {
                 return true;
             }
             Duration lateThresholdDuration = Duration.ofHours(attendancePolicy.getEarlyLeaveThreshold().getHour())
@@ -135,8 +161,10 @@ public class AttendanceRecordService {
 
             LocalTime thresholdTime = attendancePolicy.getWorkEnd().minus(lateThresholdDuration);
 
-            return attendanceRecord.getCheckIn().isBefore(thresholdTime);
+            return attendanceRecord.getCheckInTime().isBefore(thresholdTime);
 
         }).toList();
     }
+
+
 }

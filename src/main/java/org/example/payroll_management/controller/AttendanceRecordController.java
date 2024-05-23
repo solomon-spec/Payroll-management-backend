@@ -1,8 +1,10 @@
 package org.example.payroll_management.controller;
 
-import org.example.payroll_management.model.AttendanceRecord;
+import org.example.payroll_management.dto.AttendanceRecordDTO;
 import org.example.payroll_management.service.AttendanceRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -25,8 +27,9 @@ public class AttendanceRecordController {
      * @return JSON object representing the newly created attendance record
      */
     @PostMapping("/employees/{employeeId}/check-in")
-    public AttendanceRecord checkInEmployee(@PathVariable Long employeeId) {
-        return attendanceRecordService.checkInEmployee(employeeId);
+    public ResponseEntity<AttendanceRecordDTO> checkInEmployee(@PathVariable Long employeeId) {
+        AttendanceRecordDTO createdRecord = attendanceRecordService.checkInEmployee(employeeId);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdRecord);
     }
 
     /**
@@ -36,8 +39,9 @@ public class AttendanceRecordController {
      * @return JSON object representing the updated attendance record
      */
     @PatchMapping("/employees/{employeeId}/check-out")
-    public AttendanceRecord checkOutEmployee(@PathVariable Long employeeId) {
-        return attendanceRecordService.checkOutEmployee(employeeId);
+    public ResponseEntity<AttendanceRecordDTO> checkOutEmployee(@PathVariable Long employeeId) {
+        AttendanceRecordDTO updatedRecord = attendanceRecordService.checkOutEmployee(employeeId);
+        return ResponseEntity.ok(updatedRecord);
     }
 
     /**
@@ -49,10 +53,11 @@ public class AttendanceRecordController {
      * @return JSON object representing the attendance record of the employee between the specified dates
      */
     @GetMapping("/employees/{employeeId}")
-    public List<AttendanceRecord> getAttendanceRecord(@PathVariable Long employeeId,
-                                                      @RequestParam(required = false) LocalDate startDate,
-                                                      @RequestParam(required = false) LocalDate endDate) {
-        return attendanceRecordService.getAttendanceRecord(employeeId, startDate, endDate);
+    public ResponseEntity<List<AttendanceRecordDTO>> getAttendanceRecord(@PathVariable Long employeeId,
+                                                                         @RequestParam(required = false) LocalDate startDate,
+                                                                         @RequestParam(required = false) LocalDate endDate) {
+        List<AttendanceRecordDTO> records = attendanceRecordService.getAttendanceRecord(employeeId, startDate, endDate);
+        return ResponseEntity.ok(records);
     }
 
     /**
@@ -63,9 +68,10 @@ public class AttendanceRecordController {
      * @return JSON array containing attendance records within the specified date range
      */
     @GetMapping("/all")
-    public List<AttendanceRecord> getAttendanceRecord(@RequestParam(required = false) LocalDate startDate,
-                                                      @RequestParam(required = false) LocalDate endDate) {
-        return attendanceRecordService.getAttendanceRecordByTime(startDate, endDate);
+    public ResponseEntity<List<AttendanceRecordDTO>> getAttendanceRecord(@RequestParam(required = false) LocalDate startDate,
+                                                                         @RequestParam(required = false) LocalDate endDate) {
+        List<AttendanceRecordDTO> records = attendanceRecordService.getAttendanceRecordByTime(startDate, endDate);
+        return ResponseEntity.ok(records);
     }
 
     /**
@@ -91,8 +97,9 @@ public class AttendanceRecordController {
      * @return JSON array containing attendance records with late check-ins
      */
     @GetMapping("/employees/{employeeId}/records/late-check-ins")
-    public List<AttendanceRecord> getLateCheckIns(@PathVariable Long employeeId) {
-        return attendanceRecordService.getLateCheckIns(employeeId);
+    public ResponseEntity<List<AttendanceRecordDTO>> getLateCheckIns(@PathVariable Long employeeId) {
+        List<AttendanceRecordDTO> records = attendanceRecordService.getLateCheckIns(employeeId);
+        return ResponseEntity.ok(records);
     }
     /**
      * Retrieves all attendance records with absent days based on the employee's attendance policy.
@@ -101,8 +108,9 @@ public class AttendanceRecordController {
      * @return JSON array containing attendance records with absent days
      */
     @GetMapping("/employees/{employeeId}/records/absent-days")
-    public List<AttendanceRecord> getAbsentDays(@PathVariable Long employeeId) {
-        return attendanceRecordService.getAbsentDays(employeeId);
+    public ResponseEntity<List<AttendanceRecordDTO>> getAbsentDays(@PathVariable Long employeeId) {
+        List<AttendanceRecordDTO> records = attendanceRecordService.getAbsentDays(employeeId);
+        return ResponseEntity.ok(records);
     }
     /**
      * Retrieves all attendance records with early leaves based on the employee's attendance policy.
@@ -111,8 +119,9 @@ public class AttendanceRecordController {
      * @return JSON array containing attendance records with early leaves
      */
     @GetMapping("/employees/{employeeId}/records/early-leaves")
-    public List<AttendanceRecord> getEarlyLeaves(@PathVariable Long employeeId) {
-        return attendanceRecordService.getEarlyLeaves(employeeId);
+    public ResponseEntity<List<AttendanceRecordDTO>> getEarlyLeaves(@PathVariable Long employeeId) {
+        List<AttendanceRecordDTO> records = attendanceRecordService.getEarlyLeaves(employeeId);
+        return ResponseEntity.ok(records);
     }
 
 

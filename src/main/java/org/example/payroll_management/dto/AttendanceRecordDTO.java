@@ -4,14 +4,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class AttendanceRecordDTO {
     private Long id;
     private Long employeeId;
-    private String date;
-    private String checkInTime;
-    private String checkOutTime;
+    private LocalDate date;
+    private LocalTime checkInTime;
+    private LocalTime checkOutTime;
 
 }
