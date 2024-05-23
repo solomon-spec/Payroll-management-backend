@@ -59,8 +59,9 @@ public SalaryDTO createSalary(SalaryDTO salaryDTO) {
 }
 
 public SalaryDTO getSalaryById(Long id) {
-    Salary salary = salaryRepository.findById(id).orElse(null);
-    return salary != null ? convertToDTO(salary) : null;
+    Salary salary = salaryRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Salary not found"));
+    return convertToDTO(salary);
 }
 
 public SalaryDTO updateSalary(Long id, SalaryDTO salaryDTO) {
@@ -70,11 +71,17 @@ public SalaryDTO updateSalary(Long id, SalaryDTO salaryDTO) {
 }
 
     public void deleteSalary(Long id) {
+        if (!salaryRepository.existsById(id)) {
+            throw new RuntimeException("Salary with id " + id + " not found");
+        }
         salaryRepository.deleteById(id);
     }
 
 
     public List<SalaryDTO> getSalariesByEmployeeId(Long employeeId) {
+        if (!employeeRepository.existsById(employeeId)) {
+            throw new RuntimeException("Employee with id " + employeeId + " not found");
+        }
         return salaryRepository.findAllByEmployeeId(employeeId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
