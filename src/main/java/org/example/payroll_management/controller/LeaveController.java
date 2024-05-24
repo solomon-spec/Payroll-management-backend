@@ -1,7 +1,6 @@
 package org.example.payroll_management.controller;
 
 import org.example.payroll_management.dto.LeaveDTO;
-import org.example.payroll_management.model.Leave;
 import org.example.payroll_management.model.LeaveStatus;
 import org.example.payroll_management.service.LeaveService;
 import org.springframework.beans.factory.annotation.Autowired;
