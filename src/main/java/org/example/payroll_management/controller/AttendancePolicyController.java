@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/attendance-policy")
 public class AttendancePolicyController {
 
-
     AttendancePolicyService attendancePolicyService;
 
     @Autowired
@@ -26,6 +25,7 @@ public class AttendancePolicyController {
      * @param attendancePolicy JSON object containing name, description, lateThreshold, absenceThreshold, and earlyLeaveThreshold
      * @return JSON object representing the newly created attendance policy
      */
+
     @PostMapping("")
     public ResponseEntity<AttendancePolicyDTO> createAttendancePolicy(@RequestBody AttendancePolicyDTO attendancePolicy) {
         AttendancePolicyDTO createdAttendancePolicy = attendancePolicyService.createAttendancePolicy(attendancePolicy);
