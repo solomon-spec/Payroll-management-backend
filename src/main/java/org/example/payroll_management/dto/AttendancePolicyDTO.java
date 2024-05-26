@@ -21,7 +21,6 @@ public class AttendancePolicyDTO {
     private String description;
 
     @NotNull(message = "Work start time cannot be null")
-    @ApiModelProperty(example = "13:45:00")
     private LocalTime workStart;
 
     @NotNull(message = "Work end time cannot be null")

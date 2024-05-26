@@ -26,6 +26,6 @@ public class GlobalExceptionHandler {
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
-        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST); // This ensures a 400 status code is returned
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }
