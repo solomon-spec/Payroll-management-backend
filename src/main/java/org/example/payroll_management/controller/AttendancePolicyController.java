@@ -1,5 +1,7 @@
 package org.example.payroll_management.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.payroll_management.dto.AttendancePolicyDTO;
 import org.example.payroll_management.service.AttendancePolicyService;
@@ -12,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/attendance-policy")
+@Tag(name = "Attendance Policy Controller", description = "Controller for managing attendance policies")
 public class AttendancePolicyController {
 
     AttendancePolicyService attendancePolicyService;
@@ -22,6 +25,7 @@ public class AttendancePolicyController {
     }
 
     @GetMapping("/all")
+    @Operation(summary = "Get all attendance policies", description = "Retrieves all attendance policies in the system")
     public ResponseEntity<List<AttendancePolicyDTO>> getAllAttendancePolicies() {
         List<AttendancePolicyDTO> allPolicies = attendancePolicyService.getAllAttendancePolicy();
         return ResponseEntity.ok(allPolicies);
@@ -35,6 +39,7 @@ public class AttendancePolicyController {
      */
 
     @PostMapping("")
+    @Operation(summary = "Create a new attendance policy", description = "Creates a new attendance policy in the system")
     public ResponseEntity<AttendancePolicyDTO> createAttendancePolicy(@Valid @RequestBody AttendancePolicyDTO attendancePolicy) {
         AttendancePolicyDTO createdAttendancePolicy = attendancePolicyService.createAttendancePolicy(attendancePolicy);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAttendancePolicy);
@@ -47,6 +52,7 @@ public class AttendancePolicyController {
      * @return JSON object representing the attendance policy with the specified ID
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Get an attendance policy by ID", description = "Retrieves the details of an attendance policy by its ID")
     public ResponseEntity<AttendancePolicyDTO> getAttendancePolicyById(@PathVariable Long id) {
         AttendancePolicyDTO attendancePolicy = attendancePolicyService.getAttendancePolicyById(id);
         if (attendancePolicy == null) {
@@ -63,6 +69,7 @@ public class AttendancePolicyController {
      * @return JSON object representing the updated attendance policy
      */
     @PutMapping("/{id}")
+    @Operation(summary = "Update an attendance policy", description = "Updates an existing attendance policy with new data")
     public ResponseEntity<AttendancePolicyDTO> updateAttendancePolicy(@PathVariable Long id,@Valid @RequestBody AttendancePolicyDTO attendancePolicy) {
         AttendancePolicyDTO updatedAttendancePolicy = attendancePolicyService.updateAttendancePolicy(id, attendancePolicy);
         if (updatedAttendancePolicy == null) {
@@ -78,6 +85,7 @@ public class AttendancePolicyController {
      * @return No content (204) if successful
      */
     @DeleteMapping("/{id}")
+    @Operation(summary = "Delete an attendance policy", description = "Deletes an attendance policy from the system")
     public ResponseEntity<Void> deleteAttendancePolicy(@PathVariable Long id) {
         attendancePolicyService.deleteAttendancePolicy(id);
         return ResponseEntity.noContent().build();
