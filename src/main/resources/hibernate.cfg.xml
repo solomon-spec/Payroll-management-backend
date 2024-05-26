@@ -27,7 +27,7 @@
             true
         </property>
         <property name="hbm2ddl.auto">
-            create
+            update
         </property>
         <mapping class="org.example.payroll_management.model.Employee"/>
         <mapping class="org.example.payroll_management.model.Leave"/>
