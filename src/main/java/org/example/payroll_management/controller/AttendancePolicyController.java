@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/attendance-policy")
 public class AttendancePolicyController {
@@ -18,6 +20,11 @@ public class AttendancePolicyController {
         this.attendancePolicyService = attendancePolicyService;
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<List<AttendancePolicyDTO>> getAllAttendancePolicies() {
+        List<AttendancePolicyDTO> allPolicies = attendancePolicyService.getAllAttendancePolicy();
+        return ResponseEntity.ok(allPolicies);
+    }
 
     /**
      * Creates a new attendance policy in the system.

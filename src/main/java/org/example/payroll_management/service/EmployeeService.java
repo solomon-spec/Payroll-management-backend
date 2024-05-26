@@ -40,16 +40,23 @@ public class EmployeeService {
         employee.setPosition(employeeDTO.getPosition());
         employee.setBankAccount(employeeDTO.getBankAccount());
 
-        Employee manager = employeeRepository.findById(employeeDTO.getManagerId())
-                .orElseThrow(() -> new RuntimeException("Manager not found"));
-        Salary currentSalary = salaryRepository.findById(employeeDTO.getCurrentSalaryId())
-                .orElseThrow(() -> new RuntimeException("Salary not found"));
-        AttendancePolicy attendancePolicy = attendancePolicyRepository.findById(employeeDTO.getAttendancePolicyId())
-                .orElseThrow(() -> new RuntimeException("Attendance Policy not found"));
+        if (employeeDTO.getManagerId() != null) {
+            Employee manager = employeeRepository.findById(employeeDTO.getManagerId())
+                    .orElse(null);
+            employee.setManager(manager);
+        }
 
-        employee.setManager(manager);
-        employee.setCurrentSalary(currentSalary);
-        employee.setAttendancePolicy(attendancePolicy);
+        if (employeeDTO.getCurrentSalaryId() != null) {
+            Salary currentSalary = salaryRepository.findById(employeeDTO.getCurrentSalaryId())
+                    .orElse(null);
+            employee.setCurrentSalary(currentSalary);
+        }
+
+        if (employeeDTO.getAttendancePolicyId() != null) {
+            AttendancePolicy attendancePolicy = attendancePolicyRepository.findById(employeeDTO.getAttendancePolicyId())
+                    .orElse(null);
+            employee.setAttendancePolicy(attendancePolicy);
+        }
 
         return employee;
     }
@@ -62,16 +69,18 @@ public class EmployeeService {
         Long managerId = null;
         if (employee.getManager() != null) {
             managerId = employee.getManager().getId();
-        } else {
-            throw new IllegalArgumentException("Manager cannot be null");
         }
+//        else {
+//            throw new IllegalArgumentException("Manager cannot be null");
+//        }
 
         Long currentSalaryId = null;
         if (employee.getCurrentSalary() != null) {
             currentSalaryId = employee.getCurrentSalary().getId();
-        } else {
-            throw new IllegalArgumentException("Current Salary cannot be null");
         }
+//        else {
+//            throw new IllegalArgumentException("Current Salary cannot be null");
+//        }
 
         Long attendancePolicyId = null;
         if (employee.getAttendancePolicy() != null) {
@@ -99,6 +108,8 @@ public class EmployeeService {
 
 
     public EmployeeDTO createEmployee(EmployeeDTO employee) {
+        employee.setId(null);
+        System.out.println(convertToEntity(employee));
         return convertToDTO( employeeRepository.save(convertToEntity(employee)));
     }
 

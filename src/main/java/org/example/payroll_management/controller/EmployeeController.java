@@ -24,6 +24,7 @@ public class EmployeeController {
     // Response: The created employee record with a generated `id`.
     @PostMapping("")
     public ResponseEntity<EmployeeDTO> createEmployee(@RequestBody EmployeeDTO employee) {
+        System.out.println(employee);
         return ResponseEntity.ok(employeeService.createEmployee(employee));
     }
 

@@ -6,7 +6,9 @@ import org.example.payroll_management.repository.AttendancePolicyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class AttendancePolicyService {
@@ -44,9 +46,13 @@ public class AttendancePolicyService {
                 attendancePolicy.getAbsenceThreshold()
         );
     }
+    public List<AttendancePolicyDTO> getAllAttendancePolicy(){
+        return attendancePolicyRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
 
     public AttendancePolicyDTO createAttendancePolicy(AttendancePolicyDTO attendancePolicyDTO) {
         AttendancePolicy attendancePolicy = convertToEntity(attendancePolicyDTO);
+        attendancePolicy.setId(null);
         AttendancePolicy savedAttendancePolicy = attendancePolicyRepository.save(attendancePolicy);
         return convertToDTO(savedAttendancePolicy);
     }
