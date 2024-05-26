@@ -1,5 +1,6 @@
 package org.example.payroll_management.controller;
 
+import jakarta.validation.Valid;
 import org.example.payroll_management.dto.AttendancePolicyDTO;
 import org.example.payroll_management.service.AttendancePolicyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class AttendancePolicyController {
      */
 
     @PostMapping("")
-    public ResponseEntity<AttendancePolicyDTO> createAttendancePolicy(@RequestBody AttendancePolicyDTO attendancePolicy) {
+    public ResponseEntity<AttendancePolicyDTO> createAttendancePolicy(@Valid @RequestBody AttendancePolicyDTO attendancePolicy) {
         AttendancePolicyDTO createdAttendancePolicy = attendancePolicyService.createAttendancePolicy(attendancePolicy);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdAttendancePolicy);
     }
@@ -62,7 +63,7 @@ public class AttendancePolicyController {
      * @return JSON object representing the updated attendance policy
      */
     @PutMapping("/{id}")
-    public ResponseEntity<AttendancePolicyDTO> updateAttendancePolicy(@PathVariable Long id, @RequestBody AttendancePolicyDTO attendancePolicy) {
+    public ResponseEntity<AttendancePolicyDTO> updateAttendancePolicy(@PathVariable Long id,@Valid @RequestBody AttendancePolicyDTO attendancePolicy) {
         AttendancePolicyDTO updatedAttendancePolicy = attendancePolicyService.updateAttendancePolicy(id, attendancePolicy);
         if (updatedAttendancePolicy == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
