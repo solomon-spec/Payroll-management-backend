@@ -36,7 +36,7 @@ public class SecurityConfig{
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/auth/**", "/swagger-ui/**",  "/v3/api-docs",  "/v3/api-docs/**").permitAll()
                 .anyRequest()
-                .hasRole("EMPLOYEE")
+                .authenticated()
         );
         http.httpBasic(Customizer.withDefaults()).csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
