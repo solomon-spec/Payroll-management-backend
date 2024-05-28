@@ -2,6 +2,7 @@ package org.example.payroll_management.controller;
 
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.payroll_management.dto.EmployeeDTO;
 import org.example.payroll_management.service.EmployeeService;
@@ -14,6 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employee")
 @Tag(name = "Employee Controller", description = "Controller for managing employee records")
+@SecurityRequirement(name = "payroll-management")
 public class EmployeeController {
     private final EmployeeService employeeService;
     @Autowired

@@ -34,7 +34,7 @@ public class SecurityConfig{
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/auth/**", "/swagger-ui/**", "/swagger-resources/**", "/v3/api-docs",  "/bus/v3/api-docs/**", "/webjars/**").permitAll()
+                .requestMatchers("/auth/**", "/swagger-ui/**",  "/v3/api-docs",  "/v3/api-docs/**").permitAll()
                 .anyRequest()
                 .hasRole("EMPLOYEE")
         );

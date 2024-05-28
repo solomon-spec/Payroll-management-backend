@@ -1,6 +1,7 @@
 package org.example.payroll_management.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.payroll_management.dto.LeaveDTO;
 import org.example.payroll_management.model.LeaveStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/leave")
 @Tag(name = "Leave Controller", description = "Controller for managing leave records")
+@SecurityRequirement(name = "payroll-management")
 public class LeaveController {
     private final LeaveService leaveService;
 

@@ -1,6 +1,7 @@
 package org.example.payroll_management.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.example.payroll_management.dto.AttendancePolicyDTO;
@@ -15,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/attendance-policy")
 @Tag(name = "Attendance Policy Controller", description = "Controller for managing attendance policies")
+@SecurityRequirement(name = "payroll-management")
 public class AttendancePolicyController {
 
     AttendancePolicyService attendancePolicyService;

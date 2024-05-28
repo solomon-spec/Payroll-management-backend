@@ -1,6 +1,7 @@
 package org.example.payroll_management.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.example.payroll_management.dto.SalaryDTO;
 import org.example.payroll_management.service.SalaryService;
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/salaries")
 @Tag(name = "Salary Controller", description = "Controller for managing salary records")
+@SecurityRequirement(name = "payroll-management")
 public class SalaryController {
     public final SalaryService salaryService;
 
