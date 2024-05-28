@@ -187,4 +187,8 @@ public class EmployeeService {
         }
         throw new RuntimeException("Employee with id " + managerId + " does not exist");
     }
+
+    public Employee getEmployeeByEmail(String currentUserEmail) {
+        return employeeRepository.findByEmail(currentUserEmail).orElse(null);
+    }
 }
