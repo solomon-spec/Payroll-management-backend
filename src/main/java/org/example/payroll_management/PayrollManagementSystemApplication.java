@@ -1,6 +1,8 @@
 package org.example.payroll_management;
 
 import org.example.payroll_management.model.Employee;
+import org.example.payroll_management.service.AuthenticationService;
+import org.example.payroll_management.service.JwtService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

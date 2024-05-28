@@ -20,11 +20,18 @@ public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final SalaryRepository salaryRepository;
     private final AttendancePolicyRepository attendancePolicyRepository;
+
+    private final AuthenticationService authenticationService;
     @Autowired
-    public EmployeeService(EmployeeRepository employeeRepository,  SalaryRepository salaryRepository, AttendancePolicyRepository attendancePolicyRepository ) {
+    public EmployeeService(EmployeeRepository employeeRepository,
+                           SalaryRepository salaryRepository,
+                           AttendancePolicyRepository attendancePolicyRepository,
+                           AuthenticationService authenticationService
+    ) {
         this.employeeRepository = employeeRepository;
         this.attendancePolicyRepository = attendancePolicyRepository;
         this.salaryRepository = salaryRepository;
+        this.authenticationService = authenticationService;
     }
 
     public Employee convertToEntity(EmployeeDTO employeeDTO) {
@@ -110,7 +117,9 @@ public class EmployeeService {
     public EmployeeDTO createEmployee(EmployeeDTO employee) {
         employee.setId(null);
         System.out.println(convertToEntity(employee));
+        authenticationService.signup(employee.getEmail(), "12345678");
         return convertToDTO( employeeRepository.save(convertToEntity(employee)));
+
     }
 
     public EmployeeDTO getEmployeeById(Long id) {
