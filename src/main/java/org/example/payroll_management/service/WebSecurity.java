@@ -16,7 +16,6 @@ public class WebSecurity {
     }
 
     public boolean checkUserId(Authentication authentication, String employeeId) {
-        // Get the current user's email from the Authentication object
         String currentUserEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
 
         Employee employee = employeeService.getEmployeeByEmail(currentUserEmail);
